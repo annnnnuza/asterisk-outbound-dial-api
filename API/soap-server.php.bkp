@@ -1,0 +1,72 @@
+<?php
+ini_set( "soap.wsdl_cache_enabled", 0 );
+ini_set( 'soap.wsdl_cache_ttl', 0 );
+
+function Agenttransfer( $msisdn,$ccid)
+{
+   $url = "https://192.168.48.23/API/getMsisdnInfo.php?msisdn=$msisdn";
+  $port = 443;
+
+
+   $ch = curl_init();
+   curl_setopt($ch, CURLOPT_URL, $url);
+// Set so curl_exec returns the result instead of outputting it.
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// Get the response and close the channel.
+   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+   $response = curl_exec($ch);
+   curl_close($ch);
+   
+
+
+$response=str_replace("<pre>","",$response);
+$response=str_replace("</pre>","",$response);
+
+$obj = json_decode($response);
+
+$resultCode= $obj->{'isCallForword'}; // 12345
+if($resultCode!="true"){
+  $resultCode="false";
+}
+else{
+$resultCode="true";
+}
+return $resultCode;
+
+
+}
+
+function ChargingReq($msisdn,$ccid)
+{
+	   $url = "http://crm.hutchison.lk/API/charging.php?msisdn=$msisdn&ccid=$ccid";
+  $port = 443;
+
+
+   $ch = curl_init();
+   curl_setopt($ch, CURLOPT_URL, $url);
+// Set so curl_exec returns the result instead of outputting it.
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// Get the response and close the channel.
+   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+   $response = curl_exec($ch);
+   curl_close($ch);
+   
+
+
+$response=str_replace("<pre>","",$response);
+$response=str_replace("</pre>","",$response);
+
+//$obj = json_decode($response);
+
+//$resultCode= $obj->{'isCallForword'}; // 12345
+
+return $response;
+
+}
+
+$server = new SoapServer( "organization.wsdl" );
+
+$server->addFunction( "Agenttransfer" );
+$server->addFunction( "ChargingReq" );
+$server->handle();
+?>

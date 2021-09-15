@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Organization"
+             targetNamespace="urn:Organization"
+             xmlns:tns="urn:Organization"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+
+
+    <message name="CallRequest">
+        <part name="phoneNumber" type="xsd:string"/>
+	<part name="uniqueId" type="xsd:string"/>
+	<part name="maxRetries" type="xsd:string"/>
+	<part name="waitTime" type="xsd:string"/>
+	<part name="audioId" type="xsd:string"/>
+	
+    </message>
+
+    <message name="CallResponse">
+        <part name="Status" type="xsd:string"/>
+    </message>
+
+   <message name="StatusRequest">
+        <part name="phoneNumber" type="xsd:string"/>
+
+    </message>
+
+    <message name="StatusResponse">
+        <part name="Status" type="xsd:string"/>
+    </message>
+
+    <portType name="OBDPort">
+
+	<operation name="GenerateCall">
+             <input message="tns:CallRequest"/>
+            <output message="tns:CallResponse"/>
+        </operation>
+	<operation name="GetCallDetails">
+             <input message="tns:StatusRequest"/>
+            <output message="tns:StatusResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="OBDBinding" type="tns:OBDPort">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        
+	  <operation name="GenerateCall">
+            <soap:operation soapAction="urn:LoginAction"/>
+            	<input>
+			<soap:body use="literal"/>
+		</input>
+		<output>
+			<soap:body use="literal"/>
+		</output>
+        </operation>
+	  <operation name="GetCallDetails">
+            <soap:operation soapAction="urn:LoginAction"/>
+		<input>
+			<soap:body use="literal"/>
+		</input>
+		<output>
+			<soap:body use="literal"/>
+		</output>
+        </operation>
+    </binding>
+
+    <service name="WSDLService">
+        <port name="OBDPort" binding="tns:OBDBinding">
+            <soap:address location="http://192.168.112.73/API/soap-server.php"/>
+        </port>
+    </service>
+</definitions>
