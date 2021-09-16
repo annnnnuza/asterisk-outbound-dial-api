@@ -1,0 +1,17 @@
+#!/usr/bin/php -q
+<?php
+require('phpagi.php');
+error_reporting(E_ALL);
+
+
+$agi = new AGI();
+//$agi->answer();
+$audio = $agi->get_variable("userAudio");
+//echo $audio;
+$agi->answer();
+$audio=$audio['data'];
+$agi->exec('Playback',$audio);
+//$result=$agi-> stream_file($audio,1);
+
+
+?>
